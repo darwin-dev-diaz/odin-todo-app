@@ -34,6 +34,9 @@ function createTask(
     get completed() {
       return _completed;
     },
+    set completed(newCompleted) {
+      _completed = newCompleted;
+    },
     get project() {
       return _project;
     },
@@ -44,7 +47,7 @@ function createTask(
       newDueDate,
       newPriority,
       newProject,
-      newCompleted,
+      newCompleted
     ) {
       _title = newTitle;
       _description = newDescription;

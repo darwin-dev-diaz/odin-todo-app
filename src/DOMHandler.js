@@ -24,10 +24,14 @@ function toggleTaskPopup() {
   const page = document.querySelector(".page");
   page.classList.toggle("blur");
 }
-function createTaskDOMElement(title, description, priority, date) {
+function createTaskDOMElement(title, description, priority, date, completed=false) {
   // Create the main container div
   const taskContainer = document.createElement('div');
   taskContainer.classList.add('task', `priority--${priority}`);
+  
+  if(completed){
+    taskContainer.classList.add('completed');
+  }
 
   // Create left side of the task
   const leftContainer = document.createElement('div');
@@ -36,6 +40,9 @@ function createTaskDOMElement(title, description, priority, date) {
   // Create status element
   const status = document.createElement('div');
   status.classList.add('task--status');
+
+  const statusDiv = document.createElement('div');
+  status.appendChild(statusDiv);
 
   // Create text container
   const textContainer = document.createElement('div');

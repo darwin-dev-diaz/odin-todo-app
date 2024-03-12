@@ -139,7 +139,8 @@ function populateDOMTasks() {
       task.title,
       task.description,
       task.priority,
-      date
+      date,
+      task.completed,
     );
 
     DOMTask.querySelector(".task--delete").addEventListener(
@@ -164,10 +165,18 @@ fillProjectOptionsFromList();
 createTask("titl5432e", "description", "2024-01-01", "high", "projName");
 createTask("tit54gfds32le", "description", "2024-01-01", "high", "projName");
 createTask("tit54r432f32le", "description", "2024-01-01", "high", "projName");
+const test = createTask("tit54r432f32le", "description", "2024-01-01", "high", "projName", false);
+test.completed=true;
+
 populateDOMTasks();
 
-// populateTaskEditPopup(createTask("title", "description", "2024-01-01", "low", "testing"));
-
-///////////////////// TASK BUTTON FUNCTIONALITY /////////////////////
-///////////////////// TASK BUTTON FUNCTIONALITY /////////////////////
-///////////////////// TASK BUTTON FUNCTIONALITY /////////////////////
+///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////
+///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////
+///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////
+const completeBtns = document.querySelectorAll(".task--status");
+completeBtns.forEach(btn=>{
+  btn.addEventListener('click',event=>{
+    
+    event.target.parentNode.parentNode.classList.toggle("completed");
+  });
+});
