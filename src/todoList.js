@@ -1,14 +1,15 @@
 // this file will be where the logic of the todo list is stored. It will have scripts to create the tasks and group them into projects
 
-const taskList1 = [];
+const taskList = [];
+const projectList = [];
 
 function createTask(
   title,
   description,
   dueDate,
   priority,
+  project = "main",
   completed = false,
-  project = "main"
 ) {
   let _title = title;
   let _description = description;
@@ -17,7 +18,7 @@ function createTask(
   let _completed = completed;
   let _project = project;
 
-  return {
+  const newTask = {
     // Getter and setter for title
     get title() {
       return _title;
@@ -61,33 +62,26 @@ function createTask(
       _project = newProject;
     },
   };
+  taskList.push(newTask);
+  projectList.forEach((project) => {
+    project.addNewTask(newTask);
+  });
+
+  return newTask;
 }
 
 function createProject(title) {
-  let taskList = [];
+  let projTaskList = [];
 
-  const addNewTasks = (mainTaskList) => {
-    for (const task of mainTaskList) {
-      if (task.project === title && !taskList.includes(task)) {
-        taskList.push(task);
-        console.log("Pushed");
-      }
+  const addNewTask = (task) => {
+    if (task.project === title && !projTaskList.includes(task)) {
+      projTaskList.push(task);
     }
   };
 
-  return { title, taskList, addNewTasks };
+  const newProject = { title, projTaskList, addNewTask };
+  projectList.push(newProject);
+  return newProject;
 }
 
-taskList1.push(createTask(
-  "Finish homework",
-  "Finish my science homework",
-  "03-08-2024",
-  "important",
-  false,
-  "school"
-));
-
-const schoolProject = createProject("school");
-schoolProject.addNewTasks(taskList1);
-schoolProject.addNewTasks(taskList1);
-console.log(schoolProject.taskList.length);
+export {createTask, createProject, projectList, taskList};
