@@ -72,32 +72,30 @@ createTaskForm.addEventListener("submit", (event) => {
   const title = [...data.entries()][0][1];
   const description = [...data.entries()][1][1];
   const date = [...data.entries()][2][1];
-  // const date = format(
-  //   new Date([...data.entries()][2][1].split("-")),
-  //   "eeee, MMMM do"
-  // );
+
   const project = [...data.entries()][3][1];
   const priority = [...data.entries()][4][1];
 
-  
   createTask(title, description, date, priority, project);
-  
+  console.log(taskList);
 
-  taskList.forEach((task) => {
-    const [li, option] = createProjectOptions(project.title);
-    projectsNav.appendChild(li);
-    projectsDropDown.appendChild(option);
-  });
+  populateDOMTasks();
 
   toggleTaskPopup();
 });
 
-// const taskListDOM = document.querySelector(".task-list");
-// taskListDOM.appendChild(
-//   createTaskDOMElement(
-//     "Title",
-//     "This a description of a pretty good length",
-//     "high",
-//     "Mar 5th"
-//   )
-// );
+function populateDOMTasks() {
+  const taskListDOM = document.querySelector(".task-list");
+  taskListDOM.innerHTML = "";
+
+  taskList.forEach((task) => {
+    const date = format(new Date(task.dueDate.split("-")), "eeee, MMMM do");
+    const DOMTask = createTaskDOMElement(
+      task.title,
+      task.description,
+      task.priority,
+      date,
+    );
+    taskListDOM.appendChild(DOMTask);
+  });
+} 
