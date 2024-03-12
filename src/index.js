@@ -55,7 +55,9 @@ function fillProjectOptionsFromList() {
   const projectsDropDown = document.querySelector("#projects-drop-down");
   projectsDropDown.innerHTML = `<option value="main">Main</option>`;
 
-  const projectsDropDownEdit = document.querySelector("#projects-drop-down-edit");
+  const projectsDropDownEdit = document.querySelector(
+    "#projects-drop-down-edit"
+  );
   projectsDropDownEdit.innerHTML = `<option value="main">Main</option>`;
 
   projectList.forEach((project) => {
@@ -69,10 +71,13 @@ function fillProjectOptionsFromList() {
 ///////////////////// EDIT TASK POPUP /////////////////////
 ///////////////////// EDIT TASK POPUP /////////////////////
 ///////////////////// EDIT TASK POPUP /////////////////////
+let taskToBeEdited = null;
 const cancelEditTaskBtn = document.querySelector(".cancel-edit-btn");
 cancelEditTaskBtn.addEventListener("click", () => {
+  taskToBeEdited = null;
   toggleTaskEditPopup();
 });
+
 const editTaskForm = document.querySelector("#edit-task-form");
 editTaskForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -85,11 +90,10 @@ editTaskForm.addEventListener("submit", (event) => {
   const project = [...data.entries()][3][1];
   const priority = [...data.entries()][4][1];
 
-  console.log({title,description,date,project,priority});
 
-  // createTask(title, description, date, priority, project);
-
-  // populateDOMTasks();
+  console.log({ title, description, date, project, priority });
+  taskToBeEdited.changeTaskValues(title, description, date, priority, project)
+  populateDOMTasks();
 
   toggleTaskEditPopup();
 });
@@ -140,13 +144,14 @@ function populateDOMTasks() {
 
     DOMTask.querySelector(".task--delete").addEventListener(
       "click",
-      (event) => {
+      () => {
         removeTask(task);
         populateDOMTasks();
       }
     );
 
     DOMTask.querySelector(".task--edit").addEventListener("click", (event) => {
+      taskToBeEdited = task;
       populateTaskEditPopup(task);
       toggleTaskEditPopup();
     });

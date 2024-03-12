@@ -248,6 +248,8 @@ h2 {
 
 .task--date {
   font-size: 18px;
+  width: 200px;
+  text-align: center;
 }
 
 .task--edit,

@@ -43,8 +43,8 @@ function createTask(
       newDescription,
       newDueDate,
       newPriority,
+      newProject,
       newCompleted,
-      newProject
     ) {
       _title = newTitle;
       _description = newDescription;
