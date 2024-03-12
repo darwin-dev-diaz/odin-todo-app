@@ -90,9 +90,8 @@ editTaskForm.addEventListener("submit", (event) => {
   const project = [...data.entries()][3][1];
   const priority = [...data.entries()][4][1];
 
-
   console.log({ title, description, date, project, priority });
-  taskToBeEdited.changeTaskValues(title, description, date, priority, project)
+  taskToBeEdited.changeTaskValues(title, description, date, priority, project);
   populateDOMTasks();
 
   toggleTaskEditPopup();
@@ -140,21 +139,26 @@ function populateDOMTasks() {
       task.description,
       task.priority,
       date,
-      task.completed,
+      task.completed
     );
 
-    DOMTask.querySelector(".task--delete").addEventListener(
-      "click",
-      () => {
-        removeTask(task);
-        populateDOMTasks();
-      }
-    );
+    DOMTask.querySelector(".task--delete").addEventListener("click", () => {
+      removeTask(task);
+      populateDOMTasks();
+    });
 
     DOMTask.querySelector(".task--edit").addEventListener("click", (event) => {
       taskToBeEdited = task;
       populateTaskEditPopup(task);
       toggleTaskEditPopup();
+    });
+
+    // complete button
+    const completeBtn = DOMTask.querySelector(".task--status");
+
+    completeBtn.addEventListener("click", (event) => {
+      task.completed = !task.completed;
+      populateDOMTasks();
     });
 
     taskListDOM.appendChild(DOMTask);
@@ -165,18 +169,18 @@ fillProjectOptionsFromList();
 createTask("titl5432e", "description", "2024-01-01", "high", "projName");
 createTask("tit54gfds32le", "description", "2024-01-01", "high", "projName");
 createTask("tit54r432f32le", "description", "2024-01-01", "high", "projName");
-const test = createTask("tit54r432f32le", "description", "2024-01-01", "high", "projName", false);
-test.completed=true;
+const test = createTask(
+  "tit54r432f32le",
+  "description",
+  "2024-01-01",
+  "high",
+  "projName",
+  false
+);
+test.completed = true;
 
 populateDOMTasks();
 
 ///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////
 ///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////
 ///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////
-const completeBtns = document.querySelectorAll(".task--status");
-completeBtns.forEach(btn=>{
-  btn.addEventListener('click',event=>{
-    
-    event.target.parentNode.parentNode.classList.toggle("completed");
-  });
-});
