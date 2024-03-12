@@ -254,6 +254,15 @@ h2 {
 .task--delete {
   width: 25px;
   height: 25px;
+
+}
+.task--edit:hover{
+  cursor: pointer;
+  fill: var(--mon-blue);
+}
+.task--delete:hover{
+  cursor: pointer;
+  fill: var(--mon-red);
 }
 .add-task {
   z-index: 999;
@@ -268,7 +277,8 @@ h2 {
   cursor: pointer;
 
 }
-.create-task-pop-up {
+.create-task-pop-up,
+.edit-task-pop-up {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -305,7 +315,8 @@ h2 {
   justify-content: center;
   align-items: center;
 }
-#create-task-form {
+#create-task-form,
+#edit-task-form {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -373,7 +384,9 @@ textarea {
 }
 
 .create-task-btn,
-.cancel-task-btn{
+.cancel-task-btn,
+.edit-task-btn,
+.cancel-edit-btn{
   font-size: 15px;
   border: 2px solid var(--mon-black);
   border-radius: 5px;
@@ -382,7 +395,9 @@ textarea {
 }
 
 .create-task-btn:hover,
-.cancel-task-btn:hover
+.cancel-task-btn:hover,
+.edit-task-btn:hover,
+.cancel-edit-btn:hover
  {
   background-color: var(--mon-grey);
   border: 2px solid var(--mon-white);

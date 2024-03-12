@@ -175,6 +175,7 @@
       </form>
     </div>
 
+
     <div class="create-task-pop-up hidden">
       <div class="create-task-pop-up--header">
         <h2>Create New Task</h2>
@@ -254,6 +255,93 @@
             <div class="create-task-button-container">
               <button class="cancel-task-btn" type="button">CANCEL</button>
               <button class="create-task-btn" type="submit">CREATE TASK</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <div class="edit-task-pop-up hidden">
+      <div class="create-task-pop-up--header">
+        <h2>Edit Task</h2>
+      </div>
+      <div class="create-task-pop-up--body">
+        <form id="edit-task-form" action="">
+          <textarea
+            class="create-task-field task-title"
+            type="text"
+            name="task-title"
+            placeholder="Title: Pay bills"
+            pattern=".*\S+.*"
+            maxlength="40"
+            required
+          ></textarea>
+          <textarea
+            class="create-task-field task-description"
+            type="text"
+            name="task-description"
+            placeholder="Description: eg. internet, phone, rent"
+            maxlength="250"
+            textarea=""
+          ></textarea>
+          <input
+            class="create-task-field task-date"
+            type="date"
+            name="task-date"
+            required
+          />
+          <div class="project-selection-container">
+            <label for="projects-drop-down">Project:</label>
+            <select class="create-task-field" name="projects-drop-down" id="projects-drop-down-edit">
+              <option value="main">Main</option>
+            </select>
+          </div>
+
+          <div class="create-task-bottom-row">
+            <div class="priority-selection">
+              Priority:
+              <input
+                type="radio"
+                id="create-new-low"
+                name="create-new-priority"
+                value="low"
+                required=""
+                checked="checked"
+              />
+              <label
+                for="create-new-low"
+                class="create-new__priority-btn create-new__priority-btn--low"
+                >Low</label
+              >
+              <input
+                type="radio"
+                id="create-new-medium"
+                name="create-new-priority"
+                value="medium"
+                required=""
+              />
+              <label
+                for="create-new-medium"
+                class="create-new__priority-btn create-new__priority-btn--medium"
+                >Medium</label
+              >
+              <input
+                type="radio"
+                id="create-new-high"
+                name="create-new-priority"
+                value="high"
+              />
+              <label
+                for="create-new-high"
+                class="create-new__priority-btn create-new__priority-btn--high create-new__priority-btn--high-active"
+                >High</label
+              >
+            </div>
+
+            <div class="create-task-button-container">
+              <button class="cancel-edit-btn" type="button">CANCEL</button>
+              <button class="edit-task-btn" type="submit">EDIT TASK</button>
             </div>
           </div>
         </form>

@@ -9,7 +9,7 @@ function createTask(
   dueDate,
   priority,
   project = "main",
-  completed = false,
+  completed = false
 ) {
   let _title = title;
   let _description = description;
@@ -19,46 +19,38 @@ function createTask(
   let _project = project;
 
   const newTask = {
-    // Getter and setter for title
     get title() {
       return _title;
     },
-    set title(newTitle) {
-      _title = newTitle;
-    },
-    // Getter and setter for description
     get description() {
       return _description;
     },
-    set description(newDescription) {
-      _description = newDescription;
-    },
-    // Getter and setter for dueDate
     get dueDate() {
       return _dueDate;
     },
-    set dueDate(newDueDate) {
-      _dueDate = newDueDate;
-    },
-    // Getter and setter for priority
     get priority() {
       return _priority;
     },
-    set priority(newPriority) {
-      _priority = newPriority;
-    },
-    // Getter and setter for completed
     get completed() {
       return _completed;
     },
-    set completed(newCompleted) {
-      _completed = newCompleted;
-    },
-    // Getter and setter for project
     get project() {
       return _project;
     },
-    set project(newProject) {
+
+    changeTaskValues: function (
+      newTitle,
+      newDescription,
+      newDueDate,
+      newPriority,
+      newCompleted,
+      newProject
+    ) {
+      _title = newTitle;
+      _description = newDescription;
+      _dueDate = newDueDate;
+      _priority = newPriority;
+      _completed = newCompleted;
       _project = newProject;
     },
   };
@@ -70,6 +62,16 @@ function createTask(
   return newTask;
 }
 
+function removeTask(task) {
+  taskList.splice(taskList.indexOf(task), 1);
+  if (task.project !== "main") {
+    const projectToEdit = projectList.filter(
+      (project) => project.title === task.project
+    )[0];
+    projectToEdit.removeTaskFromList(task);
+  }
+}
+
 function createProject(title) {
   let projTaskList = [];
 
@@ -79,9 +81,13 @@ function createProject(title) {
     }
   };
 
-  const newProject = { title, projTaskList, addNewTask };
+  const removeTaskFromList = (task) => {
+    projTaskList.splice(projTaskList.indexOf(task), 1);
+  };
+
+  const newProject = { title, projTaskList, addNewTask, removeTaskFromList };
   projectList.push(newProject);
   return newProject;
 }
 
-export {createTask, createProject, projectList, taskList};
+export { createTask, createProject, projectList, taskList, removeTask };

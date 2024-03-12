@@ -1,10 +1,10 @@
+// CREATE PROJECT METHODS
 function toggleProjectPopup() {
   const popup = document.querySelector(".create-project-pop-up");
   popup.classList.toggle("hidden");
   const page = document.querySelector(".page");
   page.classList.toggle("blur");
 }
-
 function createProjectOptions(projectName) {
   const li = document.createElement("li");
   li.classList.add("project-index");
@@ -16,13 +16,14 @@ function createProjectOptions(projectName) {
 
   return [li, option];
 }
+
+// CREATE TASK METHODS
 function toggleTaskPopup() {
   const popup = document.querySelector(".create-task-pop-up");
   popup.classList.toggle("hidden");
   const page = document.querySelector(".page");
   page.classList.toggle("blur");
 }
-
 function createTaskDOMElement(title, description, priority, date) {
   // Create the main container div
   const taskContainer = document.createElement('div');
@@ -106,7 +107,31 @@ function createTaskDOMElement(title, description, priority, date) {
 
   return taskContainer;
 }
+// EDIT TASK METHODS
+
+function toggleTaskEditPopup() {
+  const popup = document.querySelector(".edit-task-pop-up");
+  popup.classList.toggle("hidden");
+  const page = document.querySelector(".page");
+  page.classList.toggle("blur");
+}
+
+function populateTaskEditPopup(task){
+  const popUp = document.querySelector(".edit-task-pop-up");
+
+  const titleField = popUp.querySelector(".task-title");
+  titleField.innerHTML = task.title;
+  const descriptionField = popUp.querySelector(".task-description");
+  descriptionField.innerHTML = task.description;
+  const dateField = popUp.querySelector(".task-date");
+  dateField.value = task.dueDate;
+  const projectField = popUp.querySelector(`#projects-drop-down-edit`);
+  projectField.value = task.project;
+
+  const priorityField = popUp.querySelector(`#create-new-${task.priority}`);
+  priorityField.checked = true;
+}
 
 
 
-export { toggleProjectPopup, createProjectOptions, toggleTaskPopup, createTaskDOMElement };
+export { toggleProjectPopup, createProjectOptions, toggleTaskPopup, createTaskDOMElement, toggleTaskEditPopup, populateTaskEditPopup };
