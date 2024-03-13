@@ -140,11 +140,26 @@ function populateTaskEditPopup(task){
 
 // TASK INFO METHODS
 function toggleInfoPopup() {
-  const popup = document.querySelector(".create-task-pop-up");
+  const popup = document.querySelector(".task-info-pop-up");
   popup.classList.toggle("hidden");
   const page = document.querySelector(".page");
   page.classList.toggle("blur");
 }
 
+function populateInfoPopup(task){
+  const popUp = document.querySelector(".task-info-pop-up");
 
-export { toggleProjectPopup, createProjectOptions, toggleTaskPopup, createTaskDOMElement, toggleTaskEditPopup, populateTaskEditPopup };
+  const titleField = popUp.querySelector(".task-info-title");
+  titleField.innerHTML = task.title;
+  const descriptionField = popUp.querySelector(".task-info-description>span:nth-child(2)");
+  descriptionField.innerHTML = task.description;
+  const dateField = popUp.querySelector(".task-info-date>span:nth-child(2)");
+  dateField.innerHTML = task.dueDate;
+  const projectField = popUp.querySelector(`.task-info-project>span:nth-child(2)`);
+  projectField.innerHTML = task.project;
+  const priorityField = popUp.querySelector(`.task-info-priority>span:nth-child(2)`);
+  priorityField.innerHTML = task.priority;
+}
+
+
+export { toggleProjectPopup, createProjectOptions, toggleTaskPopup, createTaskDOMElement, toggleTaskEditPopup, populateTaskEditPopup, toggleInfoPopup, populateInfoPopup };

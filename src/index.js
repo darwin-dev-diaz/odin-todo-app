@@ -16,6 +16,8 @@ import {
   createTaskDOMElement,
   toggleTaskEditPopup,
   populateTaskEditPopup,
+  toggleInfoPopup,
+  populateInfoPopup
 } from "./DOMHandler";
 import { format } from "date-fns";
 // import "./DOMHandler"
@@ -70,7 +72,12 @@ function fillProjectOptionsFromList() {
     projectsDropDownEdit.appendChild(clonedOption);
   });
 }
-///////////////////// EDIT TASK POPUP /////////////////////
+///////////////////// TASK INFO POPUP /////////////////////
+const infoCloseBtn = document.querySelector(".task-info-close");
+infoCloseBtn.addEventListener("click",()=>{
+  toggleInfoPopup();
+});
+
 ///////////////////// EDIT TASK POPUP /////////////////////
 ///////////////////// EDIT TASK POPUP /////////////////////
 let taskToBeEdited = null;
@@ -93,7 +100,7 @@ editTaskForm.addEventListener("submit", (event) => {
   const priority = [...data.entries()][4][1];
 
   console.log({ title, description, date, project, priority });
-  taskToBeEdited.changeTaskValues(title, description, date, priority, project);
+  taskToBeEdited.changeTaskValues(title, description, date, priority, project, taskToBeEdited.completed);
   populateDOMTasks();
 
   toggleTaskEditPopup();
@@ -154,9 +161,10 @@ function populateDOMTasks() {
       populateTaskEditPopup(task);
       toggleTaskEditPopup();
     });
-
+    
     DOMTask.querySelector(".task--info").addEventListener("click",()=>{
-      console.log('test');
+      populateInfoPopup(task);
+      toggleInfoPopup();
     });
 
     // complete button
