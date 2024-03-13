@@ -267,10 +267,15 @@ h2 {
 
 .task--info {
   justify-self: end;
-
+  
   border: var(--mon-grey) solid 3px;
   padding: 7px;
   border-radius: 5px;
+}
+.task--info:hover {
+  background-color: var(--mon-grey);
+  color: var(--mon-white);
+  cursor: pointer;
 }
 
 .task--date {
@@ -307,7 +312,7 @@ h2 {
 
 }
 .create-task-pop-up,
-.edit-task-pop-up {
+.edit-task-pop-up{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -438,4 +443,50 @@ textarea {
   width: 100%;
   justify-content: space-between;
   align-items: center;
+}
+
+.task-info-pop-up {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 700px;
+  height: 200px;
+  padding: 30px;
+  background-color: var(--mon-white);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.task-info-close{
+  align-self: flex-end;
+  width: 35px;
+  height: 35px;
+}
+.task-info-close:hover{
+  cursor:pointer;
+  fill: var(--mon-red);
+}
+
+.task-info-title{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.task-info-project,
+.task-info-priority,
+.task-info-date,
+.task-info-description{
+  font-size: 20px;
+  
+}
+
+.task-info-project>span:first-child,
+.task-info-priority>span:first-child,
+.task-info-date>span:first-child,
+.task-info-description>span:first-child{
+  font-weight: bold;
+
 }

@@ -114,15 +114,14 @@ function createTaskDOMElement(title, description, priority, date, completed=fals
 
   return taskContainer;
 }
-// EDIT TASK METHODS
 
+// EDIT TASK METHODS
 function toggleTaskEditPopup() {
   const popup = document.querySelector(".edit-task-pop-up");
   popup.classList.toggle("hidden");
   const page = document.querySelector(".page");
   page.classList.toggle("blur");
 }
-
 function populateTaskEditPopup(task){
   const popUp = document.querySelector(".edit-task-pop-up");
 
@@ -139,6 +138,13 @@ function populateTaskEditPopup(task){
   priorityField.checked = true;
 }
 
+// TASK INFO METHODS
+function toggleInfoPopup() {
+  const popup = document.querySelector(".create-task-pop-up");
+  popup.classList.toggle("hidden");
+  const page = document.querySelector(".page");
+  page.classList.toggle("blur");
+}
 
 
 export { toggleProjectPopup, createProjectOptions, toggleTaskPopup, createTaskDOMElement, toggleTaskEditPopup, populateTaskEditPopup };

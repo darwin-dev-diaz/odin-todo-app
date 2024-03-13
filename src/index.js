@@ -149,10 +149,14 @@ function populateDOMTasks() {
       populateDOMTasks();
     });
 
-    DOMTask.querySelector(".task--edit").addEventListener("click", (event) => {
+    DOMTask.querySelector(".task--edit").addEventListener("click", () => {
       taskToBeEdited = task;
       populateTaskEditPopup(task);
       toggleTaskEditPopup();
+    });
+
+    DOMTask.querySelector(".task--info").addEventListener("click",()=>{
+      console.log('test');
     });
 
     // complete button
