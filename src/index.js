@@ -6,6 +6,7 @@ import {
   projectList,
   taskList,
   removeTask,
+  moveCheckedTaskOnList,
 } from "./todoList";
 import {
   toggleProjectPopup,
@@ -155,9 +156,14 @@ function populateDOMTasks() {
 
     // complete button
     const completeBtn = DOMTask.querySelector(".task--status");
-
     completeBtn.addEventListener("click", (event) => {
-      task.completed = !task.completed;
+      if (!task.completed) {
+        task.completed = !task.completed;
+        moveCheckedTaskOnList(task);
+      } else {
+        task.completed = !task.completed;
+        moveUncheckedTaskOnList(task);
+      }
       populateDOMTasks();
     });
 
@@ -166,21 +172,9 @@ function populateDOMTasks() {
 }
 createProject("projName");
 fillProjectOptionsFromList();
-createTask("titl5432e", "description", "2024-01-01", "high", "projName");
-createTask("tit54gfds32le", "description", "2024-01-01", "high", "projName");
-createTask("tit54r432f32le", "description", "2024-01-01", "high", "projName");
-const test = createTask(
-  "tit54r432f32le",
-  "description",
-  "2024-01-01",
-  "high",
-  "projName",
-  false
-);
-test.completed = true;
+createTask("one", "description", "2024-01-01", "high", "projName");
+createTask("two", "description", "2024-01-01", "high", "projName");
+createTask("three", "description", "2024-01-01", "high", "projName");
+createTask("four", "descriptiorewqrn", "2024-01-01", "high", "projName");
 
 populateDOMTasks();
-
-///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////
-///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////
-///////////////////// COMPLETE BUTTON FUNCTIONALITY /////////////////////

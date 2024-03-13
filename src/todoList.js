@@ -93,4 +93,39 @@ function createProject(title) {
   return newProject;
 }
 
-export { createTask, createProject, projectList, taskList, removeTask };
+function moveCheckedTaskOnList(task){
+  const currentPos = taskList.indexOf(task);
+  let newPos;
+  for(let i = currentPos+1; i < taskList.length; i++){
+    if(taskList[i].completed){
+      newPos = i - 1;
+      taskList.splice(currentPos, 1);
+      taskList.splice(newPos, 0, task);
+      break;
+    } else if (i === taskList.length-1){
+      newPos = i;
+      taskList.splice(currentPos, 1);
+      taskList.splice(newPos, 0, task);
+    }
+  }
+
+}
+function moveUncheckedTaskOnList(task){
+  const currentPos = taskList.indexOf(task);
+  let newPos;
+  for(let i = currentPos+1; i < taskList.length; i++){
+    if(taskList[i].completed){
+      newPos = i - 1;
+      taskList.splice(currentPos, 1);
+      taskList.splice(newPos, 0, task);
+      break;
+    } else if (i === taskList.length-1){
+      newPos = i;
+      taskList.splice(currentPos, 1);
+      taskList.splice(newPos, 0, task);
+    }
+  }
+
+}
+
+export { createTask, createProject, projectList, taskList, removeTask, moveCheckedTaskOnList};
