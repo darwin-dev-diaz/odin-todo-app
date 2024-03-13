@@ -7,6 +7,7 @@ import {
   taskList,
   removeTask,
   moveCheckedTaskOnList,
+  moveUncheckedTaskOnList,
 } from "./todoList";
 import {
   toggleProjectPopup,

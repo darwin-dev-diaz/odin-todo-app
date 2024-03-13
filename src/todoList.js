@@ -113,13 +113,13 @@ function moveCheckedTaskOnList(task){
 function moveUncheckedTaskOnList(task){
   const currentPos = taskList.indexOf(task);
   let newPos;
-  for(let i = currentPos+1; i < taskList.length; i++){
-    if(taskList[i].completed){
-      newPos = i - 1;
+  for(let i = currentPos-1; i > -1; i--){
+    if(!taskList[i].completed){
+      newPos = i + 1;
       taskList.splice(currentPos, 1);
       taskList.splice(newPos, 0, task);
       break;
-    } else if (i === taskList.length-1){
+    } else if (i === 0){
       newPos = i;
       taskList.splice(currentPos, 1);
       taskList.splice(newPos, 0, task);
@@ -128,4 +128,4 @@ function moveUncheckedTaskOnList(task){
 
 }
 
-export { createTask, createProject, projectList, taskList, removeTask, moveCheckedTaskOnList};
+export { createTask, createProject, projectList, taskList, removeTask, moveCheckedTaskOnList, moveUncheckedTaskOnList};
