@@ -17,10 +17,12 @@ import {
   toggleTaskEditPopup,
   populateTaskEditPopup,
   toggleInfoPopup,
-  populateInfoPopup
+  populateInfoPopup,
+  switchCurrentlySelectedFolder,
 } from "./DOMHandler";
 import { format } from "date-fns";
-// import "./DOMHandler"
+
+let currentTaskList = taskList;
 
 ///////////////////// CREATE PROJECT POPUP /////////////////////
 ///////////////////// CREATE PROJECT POPUP /////////////////////
@@ -54,6 +56,8 @@ createProjForm.addEventListener("submit", (event) => {
 
 function fillProjectOptionsFromList() {
   const projectsNav = document.querySelector(".projects-nav");
+  const selectedFolderText =
+    document.querySelector(".nav-item-selected").textContent;
   projectsNav.innerHTML = "";
 
   const projectsDropDown = document.querySelector("#projects-drop-down");
@@ -66,6 +70,17 @@ function fillProjectOptionsFromList() {
 
   projectList.forEach((project) => {
     const [li, option] = createProjectOptions(project.title);
+    if (project.title === selectedFolderText) {
+      li.classList.add("nav-item-selected");
+    }
+
+    li.addEventListener("click", () => {
+      const newTaskList = projectList.filter(
+        (project) => project.title === li.textContent
+      )[0].projTaskList;
+      currentTaskList = newTaskList;
+      populateDOMTasks();
+    });
     projectsNav.appendChild(li);
     projectsDropDown.appendChild(option);
     const clonedOption = option.cloneNode(true);
@@ -73,11 +88,14 @@ function fillProjectOptionsFromList() {
   });
 }
 ///////////////////// TASK INFO POPUP /////////////////////
+///////////////////// TASK INFO POPUP /////////////////////
+///////////////////// TASK INFO POPUP /////////////////////
 const infoCloseBtn = document.querySelector(".task-info-close");
-infoCloseBtn.addEventListener("click",()=>{
+infoCloseBtn.addEventListener("click", () => {
   toggleInfoPopup();
 });
 
+///////////////////// EDIT TASK POPUP /////////////////////
 ///////////////////// EDIT TASK POPUP /////////////////////
 ///////////////////// EDIT TASK POPUP /////////////////////
 let taskToBeEdited = null;
@@ -99,8 +117,33 @@ editTaskForm.addEventListener("submit", (event) => {
   const project = [...data.entries()][3][1];
   const priority = [...data.entries()][4][1];
 
-  console.log({ title, description, date, project, priority });
-  taskToBeEdited.changeTaskValues(title, description, date, priority, project, taskToBeEdited.completed);
+  if (taskToBeEdited.project === "main") {
+  } else {
+    const oldProjectTaskList = projectList.filter(
+      (project) => project.title === taskToBeEdited.project
+    )[0].projTaskList;
+    oldProjectTaskList.splice(oldProjectTaskList.indexOf(taskToBeEdited), 1);
+  }
+  // FINALLY IS MAKING IT SO THAT DATA CAN BE SAVED LOCALLY TO THE USERS COMPUTER
+  // YOURE ALMOST FINISHED GOOD JOB!
+
+  taskToBeEdited.changeTaskValues(
+    title,
+    description,
+    date,
+    priority,
+    project,
+    taskToBeEdited.completed
+  );
+
+  if (taskToBeEdited.project === "main") {
+  } else {
+    const newProjectTaskList = projectList.filter(
+      (project) => project.title === taskToBeEdited.project
+    )[0].projTaskList;
+    newProjectTaskList.splice(newProjectTaskList.length - 1, 0, taskToBeEdited);
+  }
+
   populateDOMTasks();
 
   toggleTaskEditPopup();
@@ -141,7 +184,7 @@ function populateDOMTasks() {
   taskListDOM.innerHTML = "";
 
   // create the dom task
-  taskList.forEach((task) => {
+  currentTaskList.forEach((task) => {
     const date = format(new Date(task.dueDate.split("-")), "eeee, MMMM do");
     const DOMTask = createTaskDOMElement(
       task.title,
@@ -161,8 +204,8 @@ function populateDOMTasks() {
       populateTaskEditPopup(task);
       toggleTaskEditPopup();
     });
-    
-    DOMTask.querySelector(".task--info").addEventListener("click",()=>{
+
+    DOMTask.querySelector(".task--info").addEventListener("click", () => {
       populateInfoPopup(task);
       toggleInfoPopup();
     });
@@ -183,11 +226,33 @@ function populateDOMTasks() {
     taskListDOM.appendChild(DOMTask);
   });
 }
-createProject("projName");
+
+///////////////////// CHANGE CURRENT PROJECT /////////////////////
+///////////////////// CHANGE CURRENT PROJECT /////////////////////
+///////////////////// CHANGE CURRENT PROJECT /////////////////////
+const allTasks = document.querySelector(".nav-item");
+allTasks.addEventListener("click", (event) => {
+  currentTaskList = taskList;
+  const navItems = document.querySelectorAll(".nav-item");
+  navItems.forEach((item) => item.classList.remove("nav-item-selected"));
+  event.target.classList.add("nav-item-selected");
+  populateDOMTasks();
+});
+
+const project = createProject("school");
+
 fillProjectOptionsFromList();
-createTask("one", "description", "2024-01-01", "high", "projName");
-createTask("two", "description", "2024-01-01", "high", "projName");
-createTask("three", "description", "2024-01-01", "high", "projName");
-createTask("four", "descriptiorewqrn", "2024-01-01", "high", "projName");
+createTask("Do homework", "science homework", "2024-01-01", "medium", "school");
+createTask("Walk the dog", "go around the block", "2024-01-01", "low", "main");
+createTask(
+  "Meal prep",
+  "use the crock pot today",
+  "2024-01-01",
+  "medium",
+  "main"
+);
+createTask("Do project", "science project", "2024-01-01", "high", "school");
+
+console.log(taskList[0])
 
 populateDOMTasks();
