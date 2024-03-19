@@ -235,14 +235,27 @@ function populateDOMTasks() {
 
     // complete button
     const completeBtn = DOMTask.querySelector(".task--status");
-    completeBtn.addEventListener("click", (event) => {
-      if (!task.completed) {
-        task.completed = !task.completed;
-        moveCheckedTaskOnList(task);
-      } else {
-        task.completed = !task.completed;
-        moveUncheckedTaskOnList(task);
+    completeBtn.addEventListener("click", () => {
+      // update change in all tasks
+      const newAllTasks = revive(localStorage.getItem("all tasks"));
+      const indexPreEdit = newAllTasks.projTaskList.indexOf(
+        newAllTasks.projTaskList.filter((x) => x.title === task.title)[0]
+      );
+      newAllTasks.projTaskList[indexPreEdit].completed =
+        !newAllTasks.projTaskList[indexPreEdit].completed;
+      localStorage.setItem("all tasks", replace(newAllTasks));
+
+      // update change in the tasks project if it has one
+      if (task.project !== "all tasks") {
+        const taskProject = revive(localStorage.getItem(task.project));
+        const indexPreEdit = taskProject.projTaskList.indexOf(
+          taskProject.projTaskList.filter((x) => x.title === task.title)[0]
+        );
+        taskProject.projTaskList[indexPreEdit].completed =
+          !taskProject.projTaskList[indexPreEdit].completed;
+        localStorage.setItem(task.project, replace(taskProject));
       }
+
       populateDOMTasks();
     });
 
