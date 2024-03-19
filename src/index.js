@@ -111,6 +111,8 @@ cancelEditTaskBtn.addEventListener("click", () => {
 const editTaskForm = document.querySelector("#edit-task-form");
 editTaskForm.addEventListener("submit", (event) => {
   event.preventDefault();
+  const newAllTasks = revive(localStorage.getItem("all tasks"));
+  const indexPreEdit = newAllTasks.projTaskList.indexOf(newAllTasks.projTaskList.filter(x=>x.title === taskToBeEdited.title)[0]);
 
   const data = new FormData(event.target);
   const title = [...data.entries()][0][1];
@@ -120,30 +122,16 @@ editTaskForm.addEventListener("submit", (event) => {
   const project = [...data.entries()][3][1];
   const priority = [...data.entries()][4][1];
 
-  if (taskToBeEdited.project === "all tasks") {
-  } else {
-    const oldProjectTaskList = projectList.filter(
-      (project) => project.title === taskToBeEdited.project
-    )[0].projTaskList;
-    oldProjectTaskList.splice(oldProjectTaskList.indexOf(taskToBeEdited), 1);
-  }
+  taskToBeEdited.title = title;
+  taskToBeEdited.description = description;
+  taskToBeEdited.dueDate = date;
+  taskToBeEdited.project = project;
+  taskToBeEdited.priority = priority;
 
-  taskToBeEdited.changeTaskValues(
-    title,
-    description,
-    date,
-    priority,
-    project,
-    taskToBeEdited.completed
-  );
+  // now move the tasktobeedited to correct spot on teh task to be edit project 
+  newAllTasks.projTaskList.splice(indexPreEdit, 1, taskToBeEdited);
+  localStorage.setItem("all tasks", replace(newAllTasks));
 
-  if (taskToBeEdited.project === "all tasks") {
-  } else {
-    const newProjectTaskList = projectList.filter(
-      (project) => project.title === taskToBeEdited.project
-    )[0].projTaskList;
-    newProjectTaskList.splice(newProjectTaskList.length - 1, 0, taskToBeEdited);
-  }
 
   populateDOMTasks();
 
@@ -200,7 +188,7 @@ function populateDOMTasks() {
 
     DOMTask.querySelector(".task--delete").addEventListener("click", () => {
       removeTask(task);
-      currentTaskList = revive(localStorage.getItem(currentFolder)).projTaskList
+      currentTaskList = revive(localStorage.getItem(currentFolder)).projTaskList;
       populateDOMTasks();
     });
 

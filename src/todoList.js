@@ -13,51 +13,13 @@ function createTask(
   project = "all tasks",
   completed = false
 ) {
-  let _title = title;
-  let _description = description;
-  let _dueDate = dueDate;
-  let _priority = priority;
-  let _completed = completed;
-  let _project = project;
-
   const newTask = {
-    get title() {
-      return _title;
-    },
-    get description() {
-      return _description;
-    },
-    get dueDate() {
-      return _dueDate;
-    },
-    get priority() {
-      return _priority;
-    },
-    get completed() {
-      return _completed;
-    },
-    set completed(newCompleted) {
-      _completed = newCompleted;
-    },
-    get project() {
-      return _project;
-    },
-
-    changeTaskValues: function (
-      newTitle,
-      newDescription,
-      newDueDate,
-      newPriority,
-      newProject,
-      newCompleted
-    ) {
-      _title = newTitle;
-      _description = newDescription;
-      _dueDate = newDueDate;
-      _priority = newPriority;
-      _completed = newCompleted;
-      _project = newProject;
-    },
+    title,
+    description,
+    dueDate,
+    priority,
+    completed,
+    project,
   };
   taskList.push(newTask);
 
@@ -67,8 +29,8 @@ function createTask(
   localStorage.setItem(allTasks.title, replace(allTasks));
 
   // add task to its project in local storage only if the task isn't in all tasks
-  if (_project !== "all tasks") {
-    const localProject = revive(localStorage.getItem(_project));
+  if (project !== "all tasks") {
+    const localProject = revive(localStorage.getItem(project));
     localProject.projTaskList.push(newTask);
     localStorage.setItem(localProject.title, replace(localProject));
   }
@@ -83,20 +45,15 @@ function removeTask(task) {
   taskList.splice(taskList.indexOf(task), 1);
   localStorage.setItem(allTasks.title, replace(allTasks));
 
-  if(task.project !== "all tasks"){
+  // remove it from local project
+  if (task.project !== "all tasks") {
     const localProject = revive(localStorage.getItem(task.project));
-    const taskFromLS = localProject.projTaskList.filter(x=>x.title === task.title)[0];
+    const taskFromLS = localProject.projTaskList.filter(
+      (x) => x.title === task.title
+    )[0];
     const indexOfTask = localProject.projTaskList.indexOf(taskFromLS);
     localProject.projTaskList.splice(indexOfTask, 1);
     localStorage.setItem(localProject.title, replace(localProject));
-  }
-
-
-  if (task.project !== "all tasks") {
-    const projectToEdit = projectList.filter(
-      (project) => project.title === task.project
-    )[0];
-    projectToEdit.removeTaskFromList(task);
   }
 }
 
