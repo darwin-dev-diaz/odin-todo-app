@@ -68,8 +68,8 @@ function fillProjectOptionsFromList() {
     "#projects-drop-down-edit"
   );
   projectsDropDownEdit.innerHTML = `<option value="main">Main</option>`;
-
-  projectList.forEach((project) => {
+  const projectListLS = Object.values(localStorage).map(x=>revive(x));
+  projectListLS.forEach((project) => {
     const [li, option] = createProjectOptions(project.title);
     if (project.title === selectedFolderText) {
       li.classList.add("nav-item-selected");
@@ -241,18 +241,7 @@ allTasks.addEventListener("click", (event) => {
   populateDOMTasks();
 });
 
-const project = createProject("school");
+// const project = createProject("school");
 
 fillProjectOptionsFromList();
-createTask("Do homework", "science homework", "2024-01-01", "medium", "school");
-createTask("Walk the dog", "go around the block", "2024-01-01", "low", "all tasks");
-createTask(
-  "Meal prep",
-  "use the crock pot today",
-  "2024-01-01",
-  "medium",
-  "all tasks"
-);
-createTask("Do project", "science project", "2024-01-01", "high", "school");
-
 populateDOMTasks();

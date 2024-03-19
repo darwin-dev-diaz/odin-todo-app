@@ -168,4 +168,4 @@ export {
   moveUncheckedTaskOnList,
 };
 
-createProject("all tasks");
+// createProject("all tasks");
