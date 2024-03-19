@@ -58,8 +58,6 @@ createProjForm.addEventListener("submit", (event) => {
 
 function fillProjectOptionsFromList() {
   const projectsNav = document.querySelector(".projects-nav");
-  const selectedFolderText =
-    document.querySelector(".nav-item-selected").textContent;
   projectsNav.innerHTML = "";
 
   const projectsDropDown = document.querySelector("#projects-drop-down");
@@ -72,16 +70,13 @@ function fillProjectOptionsFromList() {
   const projectListLS = Object.values(localStorage).map((x) => revive(x));
   projectListLS.forEach((project) => {
     const [li, option] = createProjectOptions(project.title);
-    if (project.title === selectedFolderText) {
-      li.classList.add("nav-item-selected");
-    }
 
     li.addEventListener("click", () => {
       // here, im getting the task list of the project i clicked on and setting it as the current tasks list
       const newTaskList = revive(
         localStorage.getItem(li.textContent)
       ).projTaskList;
-      console.log(newTaskList);
+
       currentTaskList = newTaskList;
       currentFolder = li.textContent;
       populateDOMTasks();
@@ -138,12 +133,10 @@ editTaskForm.addEventListener("submit", (event) => {
 
   // all tasks was old project case
   if (oldProject === "all tasks" && project !== "all tasks") {
-    console.log("one");
     const newProjectLS = revive(localStorage.getItem(project));
     newProjectLS.projTaskList.push(taskToBeEdited);
     localStorage.setItem(project, replace(newProjectLS));
   } else if (oldProject !== "all tasks" && oldProject !== project) {
-    console.log("two");
     // add to new project
     const newProjectLS = revive(localStorage.getItem(project));
     newProjectLS.projTaskList.push(taskToBeEdited);
@@ -160,7 +153,6 @@ editTaskForm.addEventListener("submit", (event) => {
       
       localStorage.setItem(oldProject, replace(oldProjectLS));
     } else {
-    console.log("three");
     const oldProjectLS = revive(localStorage.getItem(oldProject));
     const indexPreEdit = oldProjectLS.projTaskList.indexOf(
       oldProjectLS.projTaskList.filter(
@@ -275,10 +267,14 @@ function populateDOMTasks() {
   });
 }
 
+fillProjectOptionsFromList();
+populateDOMTasks();
+
 ///////////////////// CHANGE CURRENT PROJECT /////////////////////
 ///////////////////// CHANGE CURRENT PROJECT /////////////////////
 ///////////////////// CHANGE CURRENT PROJECT /////////////////////
 const allTasks = document.querySelector(".nav-item");
+allTasks.classList.add("nav-item-selected");
 allTasks.addEventListener("click", (event) => {
   currentTaskList = revive(localStorage.getItem("all tasks")).projTaskList;
   const navItems = document.querySelectorAll(".nav-item");
@@ -287,5 +283,7 @@ allTasks.addEventListener("click", (event) => {
   populateDOMTasks();
 });
 
-fillProjectOptionsFromList();
-populateDOMTasks();
+if (localStorage.length == 0) {
+  createProject("all tasks");
+  
+}
