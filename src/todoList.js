@@ -1,3 +1,5 @@
+import { replace, revive } from "./doJSON";
+
 // this file will be where the logic of the todo list is stored. It will have scripts to create the tasks and group them into projects
 
 const taskList = [];
@@ -58,6 +60,21 @@ function createTask(
     },
   };
   taskList.push(newTask);
+
+  // add task to all tasks in local storage
+  const allTasks = revive(localStorage.getItem("all tasks"));
+  allTasks.projTaskList.push(newTask);
+  localStorage.setItem(allTasks.title, replace(allTasks));
+
+  // add task to its project in local storage only if the task isn't in all tasks
+  if (_project !== "all tasks") {
+    const localProject = revive(localStorage.getItem(_project));
+    localProject.projTaskList.push(newTask);
+    localStorage.setItem(localProject.title, replace(localProject));
+    console.log(localProject);
+  }
+
+  projectList[0].projTaskList.push(newTask);
   projectList.forEach((project) => {
     project.addNewTask(newTask);
   });
@@ -66,7 +83,17 @@ function createTask(
 }
 
 function removeTask(task) {
+  // revive the project
+  const allTasks = revive(localStorage.getItem("all tasks"));
+  allTasks.projTaskList.splice(taskList.indexOf(task), 1);
   taskList.splice(taskList.indexOf(task), 1);
+  localStorage.setItem(allTasks.title, replace(allTasks));
+
+  // access the projectTaskList
+
+  // splice the projectTaskList for the task you need to remove
+  // replace the allTasks list
+
   if (task.project !== "main") {
     const projectToEdit = projectList.filter(
       (project) => project.title === task.project
@@ -90,42 +117,60 @@ function createProject(title) {
 
   const newProject = { title, projTaskList, addNewTask, removeTaskFromList };
   projectList.push(newProject);
+
+  const json = JSON.stringify(newProject, function (key, value) {
+    if (typeof value === "function") {
+      return "/Function(" + value.toString() + ")/";
+    }
+    return value;
+  });
+
+  localStorage.setItem(title, json);
+
   return newProject;
 }
 
-function moveCheckedTaskOnList(task){
+function moveCheckedTaskOnList(task) {
   const currentPos = taskList.indexOf(task);
   let newPos;
-  for(let i = currentPos+1; i < taskList.length; i++){
-    if(taskList[i].completed){
+  for (let i = currentPos + 1; i < taskList.length; i++) {
+    if (taskList[i].completed) {
       newPos = i - 1;
       taskList.splice(currentPos, 1);
       taskList.splice(newPos, 0, task);
       break;
-    } else if (i === taskList.length-1){
+    } else if (i === taskList.length - 1) {
       newPos = i;
       taskList.splice(currentPos, 1);
       taskList.splice(newPos, 0, task);
     }
   }
-
 }
-function moveUncheckedTaskOnList(task){
+function moveUncheckedTaskOnList(task) {
   const currentPos = taskList.indexOf(task);
   let newPos;
-  for(let i = currentPos-1; i > -1; i--){
-    if(!taskList[i].completed){
+  for (let i = currentPos - 1; i > -1; i--) {
+    if (!taskList[i].completed) {
       newPos = i + 1;
       taskList.splice(currentPos, 1);
       taskList.splice(newPos, 0, task);
       break;
-    } else if (i === 0){
+    } else if (i === 0) {
       newPos = i;
       taskList.splice(currentPos, 1);
       taskList.splice(newPos, 0, task);
     }
   }
-
 }
 
-export { createTask, createProject, projectList, taskList, removeTask, moveCheckedTaskOnList, moveUncheckedTaskOnList};
+export {
+  createTask,
+  createProject,
+  projectList,
+  taskList,
+  removeTask,
+  moveCheckedTaskOnList,
+  moveUncheckedTaskOnList,
+};
+
+createProject("all tasks");

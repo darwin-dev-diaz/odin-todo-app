@@ -243,16 +243,14 @@ const project = createProject("school");
 
 fillProjectOptionsFromList();
 createTask("Do homework", "science homework", "2024-01-01", "medium", "school");
-createTask("Walk the dog", "go around the block", "2024-01-01", "low", "main");
+createTask("Walk the dog", "go around the block", "2024-01-01", "low", "all tasks");
 createTask(
   "Meal prep",
   "use the crock pot today",
   "2024-01-01",
   "medium",
-  "main"
+  "all tasks"
 );
 createTask("Do project", "science project", "2024-01-01", "high", "school");
-
-console.log(taskList[0])
 
 populateDOMTasks();
