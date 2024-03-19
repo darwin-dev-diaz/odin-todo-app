@@ -138,24 +138,36 @@ editTaskForm.addEventListener("submit", (event) => {
 
   // all tasks was old project case
   if (oldProject === "all tasks" && project !== "all tasks") {
+    console.log("one");
     const newProjectLS = revive(localStorage.getItem(project));
     newProjectLS.projTaskList.push(taskToBeEdited);
     localStorage.setItem(project, replace(newProjectLS));
   } else if (oldProject !== "all tasks" && oldProject !== project) {
+    console.log("two");
     // add to new project
     const newProjectLS = revive(localStorage.getItem(project));
     newProjectLS.projTaskList.push(taskToBeEdited);
     localStorage.setItem(project, replace(newProjectLS));
-
+    
     // remove from the old project
     const oldProjectLS = revive(localStorage.getItem(oldProject));
-
+    
     const taskFromLS = oldProjectLS.projTaskList.filter(
       (x) => x.title === taskToBeEdited.title
-    )[0];
-    const indexOfTask = oldProjectLS.projTaskList.indexOf(taskFromLS);
-    oldProjectLS.projTaskList.splice(indexOfTask, 1);
-
+      )[0];
+      const indexOfTask = oldProjectLS.projTaskList.indexOf(taskFromLS);
+      oldProjectLS.projTaskList.splice(indexOfTask, 1);
+      
+      localStorage.setItem(oldProject, replace(oldProjectLS));
+    } else {
+    console.log("three");
+    const oldProjectLS = revive(localStorage.getItem(oldProject));
+    const indexPreEdit = oldProjectLS.projTaskList.indexOf(
+      oldProjectLS.projTaskList.filter(
+        (x) => x.title === taskToBeEdited.title
+      )[0]
+    );
+    oldProjectLS.projTaskList.splice(indexPreEdit, 1, taskToBeEdited);
     localStorage.setItem(oldProject, replace(oldProjectLS));
   }
 
