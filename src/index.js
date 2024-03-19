@@ -69,7 +69,7 @@ function fillProjectOptionsFromList() {
     "#projects-drop-down-edit"
   );
   projectsDropDownEdit.innerHTML = `<option value="main">Main</option>`;
-  const projectListLS = Object.values(localStorage).map(x=>revive(x));
+  const projectListLS = Object.values(localStorage).map((x) => revive(x));
   projectListLS.forEach((project) => {
     const [li, option] = createProjectOptions(project.title);
     if (project.title === selectedFolderText) {
@@ -78,7 +78,9 @@ function fillProjectOptionsFromList() {
 
     li.addEventListener("click", () => {
       // here, im getting the task list of the project i clicked on and setting it as the current tasks list
-      const newTaskList = revive(localStorage.getItem(li.textContent)).projTaskList;
+      const newTaskList = revive(
+        localStorage.getItem(li.textContent)
+      ).projTaskList;
       console.log(newTaskList);
       currentTaskList = newTaskList;
       currentFolder = li.textContent;
@@ -111,8 +113,12 @@ cancelEditTaskBtn.addEventListener("click", () => {
 const editTaskForm = document.querySelector("#edit-task-form");
 editTaskForm.addEventListener("submit", (event) => {
   event.preventDefault();
+  const oldProject = taskToBeEdited.project;
+
   const newAllTasks = revive(localStorage.getItem("all tasks"));
-  const indexPreEdit = newAllTasks.projTaskList.indexOf(newAllTasks.projTaskList.filter(x=>x.title === taskToBeEdited.title)[0]);
+  const indexPreEdit = newAllTasks.projTaskList.indexOf(
+    newAllTasks.projTaskList.filter((x) => x.title === taskToBeEdited.title)[0]
+  );
 
   const data = new FormData(event.target);
   const title = [...data.entries()][0][1];
@@ -128,10 +134,34 @@ editTaskForm.addEventListener("submit", (event) => {
   taskToBeEdited.project = project;
   taskToBeEdited.priority = priority;
 
-  // now move the tasktobeedited to correct spot on teh task to be edit project 
+  // if the task has a new project, (1) check if the old project was the all tasks project, in that case, just add it to the new project
+
+  // all tasks was old project case
+  if (oldProject === "all tasks" && project !== "all tasks") {
+    const newProjectLS = revive(localStorage.getItem(project));
+    newProjectLS.projTaskList.push(taskToBeEdited);
+    localStorage.setItem(project, replace(newProjectLS));
+  } else if (oldProject !== "all tasks" && oldProject !== project) {
+    // add to new project
+    const newProjectLS = revive(localStorage.getItem(project));
+    newProjectLS.projTaskList.push(taskToBeEdited);
+    localStorage.setItem(project, replace(newProjectLS));
+
+    // remove from the old project
+    const oldProjectLS = revive(localStorage.getItem(oldProject));
+
+    const taskFromLS = oldProjectLS.projTaskList.filter(
+      (x) => x.title === taskToBeEdited.title
+    )[0];
+    const indexOfTask = oldProjectLS.projTaskList.indexOf(taskFromLS);
+    oldProjectLS.projTaskList.splice(indexOfTask, 1);
+
+    localStorage.setItem(oldProject, replace(oldProjectLS));
+  }
+
+  // now move the taskToBeEdited to correct spot on all tasks project
   newAllTasks.projTaskList.splice(indexPreEdit, 1, taskToBeEdited);
   localStorage.setItem("all tasks", replace(newAllTasks));
-
 
   populateDOMTasks();
 
@@ -162,20 +192,18 @@ createTaskForm.addEventListener("submit", (event) => {
   const priority = [...data.entries()][4][1];
 
   createTask(title, description, date, priority, project);
-  currentTaskList = revive(localStorage.getItem(currentFolder)).projTaskList
   populateDOMTasks();
 
   toggleTaskPopup();
 });
 
 function populateDOMTasks() {
-  console.log("populateDOMTasks ran");
-  console.log({currentTaskList, currentFolder});
   const taskListDOM = document.querySelector(".task-list");
   taskListDOM.innerHTML = "";
 
+  currentTaskList = revive(localStorage.getItem(currentFolder)).projTaskList;
+
   // create the dom task from the all tasks project
-  // you have to update the current task list each time you create a new tasks
   currentTaskList.forEach((task) => {
     const date = format(new Date(task.dueDate.split("-")), "eeee, MMMM do");
     const DOMTask = createTaskDOMElement(
@@ -188,7 +216,9 @@ function populateDOMTasks() {
 
     DOMTask.querySelector(".task--delete").addEventListener("click", () => {
       removeTask(task);
-      currentTaskList = revive(localStorage.getItem(currentFolder)).projTaskList;
+      currentTaskList = revive(
+        localStorage.getItem(currentFolder)
+      ).projTaskList;
       populateDOMTasks();
     });
 
@@ -231,7 +261,6 @@ allTasks.addEventListener("click", (event) => {
   event.target.classList.add("nav-item-selected");
   populateDOMTasks();
 });
-
 
 fillProjectOptionsFromList();
 populateDOMTasks();
