@@ -117,7 +117,7 @@ editTaskForm.addEventListener("submit", (event) => {
   const project = [...data.entries()][3][1];
   const priority = [...data.entries()][4][1];
 
-  if (taskToBeEdited.project === "main") {
+  if (taskToBeEdited.project === "all tasks") {
   } else {
     const oldProjectTaskList = projectList.filter(
       (project) => project.title === taskToBeEdited.project
@@ -136,7 +136,7 @@ editTaskForm.addEventListener("submit", (event) => {
     taskToBeEdited.completed
   );
 
-  if (taskToBeEdited.project === "main") {
+  if (taskToBeEdited.project === "all tasks") {
   } else {
     const newProjectTaskList = projectList.filter(
       (project) => project.title === taskToBeEdited.project

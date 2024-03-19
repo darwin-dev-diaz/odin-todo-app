@@ -10,7 +10,7 @@ function createTask(
   description,
   dueDate,
   priority,
-  project = "main",
+  project = "all tasks",
   completed = false
 ) {
   let _title = title;
@@ -71,7 +71,6 @@ function createTask(
     const localProject = revive(localStorage.getItem(_project));
     localProject.projTaskList.push(newTask);
     localStorage.setItem(localProject.title, replace(localProject));
-    console.log(localProject);
   }
 
   projectList[0].projTaskList.push(newTask);
@@ -83,18 +82,22 @@ function createTask(
 }
 
 function removeTask(task) {
-  // revive the project
+  // revive the project and remove it from all tasks
   const allTasks = revive(localStorage.getItem("all tasks"));
   allTasks.projTaskList.splice(taskList.indexOf(task), 1);
   taskList.splice(taskList.indexOf(task), 1);
   localStorage.setItem(allTasks.title, replace(allTasks));
 
-  // access the projectTaskList
+  if(task.project !== "all tasks"){
+    const localProject = revive(localStorage.getItem(task.project));
+    const taskFromLS = localProject.projTaskList.filter(x=>x.title === task.title)[0];
+    const indexOfTask = localProject.projTaskList.indexOf(taskFromLS);
+    localProject.projTaskList.splice(indexOfTask, 1);
+    localStorage.setItem(localProject.title, replace(localProject));
+  }
 
-  // splice the projectTaskList for the task you need to remove
-  // replace the allTasks list
 
-  if (task.project !== "main") {
+  if (task.project !== "all tasks") {
     const projectToEdit = projectList.filter(
       (project) => project.title === task.project
     )[0];
