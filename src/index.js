@@ -23,7 +23,8 @@ import {
 import { revive, replace } from "./doJSON";
 import { format } from "date-fns";
 
-let currentTaskList = taskList;
+let currentTaskList = revive(localStorage.getItem("all tasks")).projTaskList;
+let currentFolder = "all tasks";
 
 ///////////////////// CREATE PROJECT POPUP /////////////////////
 ///////////////////// CREATE PROJECT POPUP /////////////////////
@@ -62,7 +63,7 @@ function fillProjectOptionsFromList() {
   projectsNav.innerHTML = "";
 
   const projectsDropDown = document.querySelector("#projects-drop-down");
-  projectsDropDown.innerHTML = `<option value="main">Main</option>`;
+  projectsDropDown.innerHTML = ``;
 
   const projectsDropDownEdit = document.querySelector(
     "#projects-drop-down-edit"
@@ -76,10 +77,11 @@ function fillProjectOptionsFromList() {
     }
 
     li.addEventListener("click", () => {
-      const newTaskList = projectList.filter(
-        (project) => project.title === li.textContent
-      )[0].projTaskList;
+      // here, im getting the task list of the project i clicked on and setting it as the current tasks list
+      const newTaskList = revive(localStorage.getItem(li.textContent)).projTaskList;
+      console.log(newTaskList);
       currentTaskList = newTaskList;
+      currentFolder = li.textContent;
       populateDOMTasks();
     });
     projectsNav.appendChild(li);
@@ -125,8 +127,6 @@ editTaskForm.addEventListener("submit", (event) => {
     )[0].projTaskList;
     oldProjectTaskList.splice(oldProjectTaskList.indexOf(taskToBeEdited), 1);
   }
-  // FINALLY IS MAKING IT SO THAT DATA CAN BE SAVED LOCALLY TO THE USERS COMPUTER
-  // YOURE ALMOST FINISHED GOOD JOB!
 
   taskToBeEdited.changeTaskValues(
     title,
@@ -174,19 +174,21 @@ createTaskForm.addEventListener("submit", (event) => {
   const priority = [...data.entries()][4][1];
 
   createTask(title, description, date, priority, project);
-
+  currentTaskList = revive(localStorage.getItem(currentFolder)).projTaskList
   populateDOMTasks();
 
   toggleTaskPopup();
 });
 
 function populateDOMTasks() {
+  console.log("populateDOMTasks ran");
+  console.log({currentTaskList, currentFolder});
   const taskListDOM = document.querySelector(".task-list");
   taskListDOM.innerHTML = "";
 
   // create the dom task from the all tasks project
-  const allTasks = revive(localStorage.getItem("all tasks"));
-  allTasks.projTaskList.forEach((task) => {
+  // you have to update the current task list each time you create a new tasks
+  currentTaskList.forEach((task) => {
     const date = format(new Date(task.dueDate.split("-")), "eeee, MMMM do");
     const DOMTask = createTaskDOMElement(
       task.title,
@@ -198,6 +200,7 @@ function populateDOMTasks() {
 
     DOMTask.querySelector(".task--delete").addEventListener("click", () => {
       removeTask(task);
+      currentTaskList = revive(localStorage.getItem(currentFolder)).projTaskList
       populateDOMTasks();
     });
 
@@ -234,14 +237,13 @@ function populateDOMTasks() {
 ///////////////////// CHANGE CURRENT PROJECT /////////////////////
 const allTasks = document.querySelector(".nav-item");
 allTasks.addEventListener("click", (event) => {
-  currentTaskList = taskList;
+  currentTaskList = revive(localStorage.getItem("all tasks")).projTaskList;
   const navItems = document.querySelectorAll(".nav-item");
   navItems.forEach((item) => item.classList.remove("nav-item-selected"));
   event.target.classList.add("nav-item-selected");
   populateDOMTasks();
 });
 
-// const project = createProject("school");
 
 fillProjectOptionsFromList();
 populateDOMTasks();

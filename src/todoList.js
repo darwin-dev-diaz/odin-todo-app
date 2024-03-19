@@ -73,11 +73,6 @@ function createTask(
     localStorage.setItem(localProject.title, replace(localProject));
   }
 
-  projectList[0].projTaskList.push(newTask);
-  projectList.forEach((project) => {
-    project.addNewTask(newTask);
-  });
-
   return newTask;
 }
 
