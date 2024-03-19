@@ -121,15 +121,7 @@ function createProject(title) {
   const newProject = { title, projTaskList, addNewTask, removeTaskFromList };
   projectList.push(newProject);
 
-  const json = JSON.stringify(newProject, function (key, value) {
-    if (typeof value === "function") {
-      return "/Function(" + value.toString() + ")/";
-    }
-    return value;
-  });
-
-  localStorage.setItem(title, json);
-
+  localStorage.setItem(title, replace(newProject));
   return newProject;
 }
 

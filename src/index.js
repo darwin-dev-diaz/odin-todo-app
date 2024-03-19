@@ -20,6 +20,7 @@ import {
   populateInfoPopup,
   switchCurrentlySelectedFolder,
 } from "./DOMHandler";
+import { revive, replace } from "./doJSON";
 import { format } from "date-fns";
 
 let currentTaskList = taskList;
@@ -183,8 +184,9 @@ function populateDOMTasks() {
   const taskListDOM = document.querySelector(".task-list");
   taskListDOM.innerHTML = "";
 
-  // create the dom task
-  currentTaskList.forEach((task) => {
+  // create the dom task from the all tasks project
+  const allTasks = revive(localStorage.getItem("all tasks"));
+  allTasks.projTaskList.forEach((task) => {
     const date = format(new Date(task.dueDate.split("-")), "eeee, MMMM do");
     const DOMTask = createTaskDOMElement(
       task.title,
