@@ -3,11 +3,7 @@ import "./style.css";
 import {
   createTask,
   createProject,
-  projectList,
-  taskList,
   removeTask,
-  moveCheckedTaskOnList,
-  moveUncheckedTaskOnList,
 } from "./todoList";
 import {
   toggleProjectPopup,
@@ -18,7 +14,6 @@ import {
   populateTaskEditPopup,
   toggleInfoPopup,
   populateInfoPopup,
-  switchCurrentlySelectedFolder,
 } from "./DOMHandler";
 import { revive, replace } from "./doJSON";
 import { format } from "date-fns";
@@ -61,12 +56,12 @@ function fillProjectOptionsFromList() {
   projectsNav.innerHTML = "";
 
   const projectsDropDown = document.querySelector("#projects-drop-down");
-  projectsDropDown.innerHTML = ``;
+  projectsDropDown.innerHTML = "";
 
   const projectsDropDownEdit = document.querySelector(
     "#projects-drop-down-edit"
   );
-  projectsDropDownEdit.innerHTML = `<option value="main">Main</option>`;
+  projectsDropDownEdit.innerHTML = "<option value=\"main\">Main</option>";
   const projectListLS = Object.values(localStorage).map((x) => revive(x));
   projectListLS.forEach((project) => {
     const [li, option] = createProjectOptions(project.title);
@@ -285,5 +280,5 @@ allTasks.addEventListener("click", (event) => {
 
 if (localStorage.length == 0) {
   createProject("all tasks");
-  
+
 }

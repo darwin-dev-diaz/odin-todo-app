@@ -23,4 +23,4 @@ function revive(jsonToObj) {
       return revived;
 }
 
-export {replace, revive}
+export {replace, revive};

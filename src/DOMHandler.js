@@ -145,7 +145,7 @@ function populateTaskEditPopup(task) {
   descriptionField.innerHTML = task.description;
   const dateField = popUp.querySelector(".task-date");
   dateField.value = task.dueDate;
-  const projectField = popUp.querySelector(`#projects-drop-down-edit`);
+  const projectField = popUp.querySelector("#projects-drop-down-edit");
   projectField.value = task.project;
 
   const priorityField = popUp.querySelector(`#create-new-${task.priority}`);
